@@ -1,0 +1,460 @@
+{% extends "base.html" %} {% block content %}
+<style>
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: black;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px
+}
+
+.logo img {
+    width: 40px;
+}
+ 
+body{
+  background-color: black;
+ 
+}
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  .info-box {
+    padding: 15px;
+    background-color: #edf2f7;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .info-icon {
+    font-size: 24px;
+    margin-right: 10px;
+    color: #4299e1;
+  }
+
+  .info-text {
+    flex: 1;
+    color: black;  }
+
+  .course-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-item {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+  }
+
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-button,
+  .remove-button,
+  .submit-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .add-button {
+    background-color: #4299e1;
+    color: white;
+  }
+
+  .remove-button {
+    background-color: #ff6b6b;
+    color: #fff;
+  }
+
+  .submit-button {
+    background-color: #4caf50;
+    color: #fff;
+  }
+
+  .separator {
+    flex: 1;
+    height: 1px;
+    background-color: #cbd5e0;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .loading-bar {
+    display: block;
+    height: 20px;
+    width: 0%;
+    margin-top: 10px;
+    background: #4299e1;
+  }
+
+  .suggestion {
+    list-style: none;
+    background: #b6b6b6;
+    color: #333;
+    border-radius: 5px;
+  }
+
+  .suggestion li {
+    cursor: pointer;
+  }
+
+  .suggestion li:hover {
+    background-color: #ff6b6b;
+  }
+</style>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+        <img src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png" alt="Logo">
+    </div>
+    <!-- Add any other navbar elements here -->
+</nav>
+  <div class="container">
+    <div class="info-box">
+      <div class="info-icon">ℹ️</div>
+      <div class="info-text">
+        Enter a course title or what you want to learn about. Then enter a list
+        of units, which are the specifics you want to learn. Our AI will
+        generate a course for you!
+      </div>
+    </div>
+    <form id="course-form" class="course-form">
+      {% csrf_token %}
+      <div class="form-item">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          name="courseName"
+          id="courseName"
+          autocomplete="off"
+          placeholder="Enter the topic of the course"
+          class="form-input"
+        />
+      </div>
+      <div class="suggestion"></div>
+
+      <div class="form-item">
+        <label for="units[0]" class="form-label">Unit 1</label>
+        <input
+          type="text"
+          id="units[0]"
+          name="unitNames"
+          placeholder="Enter subtopic of the course"
+          class="form-input"
+        />
+      </div>
+      <div class="form-item">
+        <label for="units[1]" class="form-label">Unit 2</label>
+        <input
+          type="text"
+          id="units[1]"
+          name="unitNames"
+          placeholder="Enter subtopic of the course"
+          class="form-input"
+        />
+      </div>
+      <div class="form-item">
+        <label for="units[2]" class="form-label">Unit 3</label>
+        <input
+          type="text"
+          id="units[2]"
+          name="unitNames"
+          placeholder="Enter subtopic of the course"
+          class="form-input"
+        />
+      </div>
+      <button type="submit" id="submit-button" class="submit-button">
+        <span id="submit-text">Let's Go!</span>
+      </button>
+    </form>
+    <div id="loading-bar" class="loading-bar"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("course-form");
+      const submitButton = document.getElementById("submit-button");
+      const loadingBar = document.getElementById("loading-bar");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const data = {
+          courseName: e.srcElement[1].value,
+          units: [
+            e.srcElement[2].value,
+            e.srcElement[3].value,
+            e.srcElement[4].value,
+          ],
+        };
+
+        const res = await fetch("processAddCourse/", {
+          method: "post",
+          headers: {
+            "X-CSRFToken": e.srcElement[0].value,
+          },
+          body: JSON.stringify(data),
+        });
+        location.href =e.srcElement[1].value;
+      });
+
+      /*       const Courses = [
+  "Introduction to Biology",
+  "Chemistry Fundamentals",
+  "Physics for Beginners",
+  "Web Development",
+  "Introduction to Data Science",
+  "Cybersecurity Essentials",
+  "Entrepreneurship and Startups",
+  "Digital Marketing Mastery",
+  "Financial Planning and Investment",
+  "Artificial Intelligence Fundamentals",
+  "Machine Learning for Beginners",
+  "JavaScript Programming",
+  "Graphic Design Basics",
+  "Photography Fundamentals",
+  "Introduction to Psychology",
+  "History of Civilization",
+  "Business Ethics and Leadership",
+  "Modern World Literature",
+  "Spanish Language Basics",
+  "French Cooking Techniques",
+  "Yoga and Meditation",
+  "Introduction to Astronomy",
+  "Environmental Science",
+  "Sociology: Understanding Society",
+  "Music Theory and Composition",
+  "Introduction to Film Studies",
+  "Introduction to Philosophy",
+  "Political Science and Government",
+  "Geology: Earth's History",
+  "Introduction to Economics",
+  "Statistics and Data Analysis",
+  "Public Speaking and Communication",
+  "Introduction to Robotics",
+  "Art History: Renaissance to Modern Art",
+  "Creative Writing Workshop",
+  "Marketing Strategies for Small Businesses",
+  "Digital Illustration and Design",
+  "Photography Editing and Post-Processing",
+  "Introduction to Nutrition and Health",
+  "World Geography and Cultures",
+  "Introduction to Cryptocurrency",
+  "Ethical Hacking and Penetration Testing",
+  "Introduction to 3D Printing",
+  "Human Anatomy and Physiology",
+  "Introduction to Sustainable Agriculture",
+  "Introduction to Python Programming",
+  "Front-End Web Development with React",
+  "Data Visualization with D3.js",
+  "Mobile App Development with React Native",
+  "Machine Learning with TensorFlow",
+  "Introduction to Artificial Neural Networks",
+  "Introduction to Game Development",
+  "Digital Marketing Analytics",
+  "Java Programming",
+  "Digital Photography Techniques",
+  "Introduction to Business Management",
+  "Financial Analysis and Investment Strategies",
+  "Spanish Language Intermediate",
+  "French Cuisine and Cooking Methods",
+  "Yoga and Mindfulness",
+  "Cosmology and Astrophysics",
+  "Conservation Biology",
+  "Cultural Anthropology",
+  "Classical Music Appreciation",
+  "Modern Art Movements",
+  "International Relations and Diplomacy",
+  "Climate Change and Environmental Policy",
+  "Statistics and Regression Analysis",
+  "Leadership and Team Management",
+  "Mobile App Design and User Experience",
+  "Natural Language Processing with Python",
+  "Machine Learning Algorithms",
+  "Virtual Reality Development",
+  "Social Media Marketing Strategies",
+  "Data Analysis with Python",
+  "Business Law and Ethics",
+  "Financial Accounting Principles",
+  "Spanish Language Proficiency",
+  "French Wine and Pairing",
+  "Meditation Techniques",
+  "Quantum Mechanics and Quantum Computing",
+  "Marine Biology and Conservation",
+  "Archaeology: Uncovering the Past",
+  "Great Philosophical Thinkers",
+  "Global Politics and Conflict Resolution",
+  "Microeconomics",
+  "Calculus",
+  "Cross-Cultural Communication",
+  "Digital Art and Illustration",
+  "Photoshop Techniques",
+  "Health and Nutrition Science",
+  "World Religions and Ethics",
+  "Blockchain Technology and Applications",
+  "Digital Marketing Campaign Management",
+  "Java Programming",
+  "Photography Composition",
+  "Human Resources Management",
+  "Financial Risk Analysis",
+  "Spanish Literature and Poetry",
+  "French Art and Impressionism",
+  "Tai Chi and Qi Gong",
+  "Astronomy and Space Exploration",
+  "Tropical Ecology and Biodiversity",
+  "Psychological Disorders and Treatment",
+  "Postmodern Literature and Theory",
+  "Diplomatic History and Negotiation",
+  "Game Design and Development",
+  "Artificial Intelligence",
+  "Blockchain and Cryptocurrency Fundamentals",
+  "JavaScript Frameworks",
+  "Data Science for Business",
+  "Machine Learning for Natural Language Processing",
+  "Web Application Security",
+  "Digital Marketing Strategy and Planning",
+  "Financial Analysis and Modeling",
+  "Data Visualization Techniques",
+  "Business Strategy",
+  "Mobile App Development",
+  "Cybersecurity Practices",
+  "Cloud Computing",
+  "Quantum Computing",
+  "Bioinformatics",
+  "Nanotechnology",
+  "Materials Science",
+  "Robotics and Automation",
+  "Space Exploration",
+  "Renewable Energy Systems",
+  "Environmental Policy and Conservation",
+  "Geopolitics and Global Security",
+  "International Business Management",
+  "Supply Chain Management",
+  "Human Resource Management",
+  "Marketing Analytics",
+  "Social Media Marketing",
+  "Branding and Advertising",
+  "Public Speaking and Persuasion",
+  "Creative Writing Workshop",
+  "Film Production and Direction",
+  "Music Composition and Production",
+  "Art History and Criticism",
+  "Philosophy and Ethics",
+  "Political Science and Governance",
+  "Economics and Economic Policy",
+  "Statistical Analysis Methods",
+  "Machine Learning and Deep Learning",
+  "Data Engineering and Big Data",
+  "Augmented and Virtual Reality",
+  "User Experience (UX) Design",
+  "Game Development and Design",
+  "Mobile Game Development",
+  "3D Printing and Additive Manufacturing",
+  "Biotechnology and Genetic Engineering",
+  "Medical Research and Health Sciences",
+  "Psychology and Behavioral Science",
+  "Sociology and Social Issues",
+  "Cultural Studies and Anthropology",
+  "History and Historical Analysis",
+  "Linguistics and Language Studies",
+  "Education and Pedagogy",
+  "Legal Studies and Jurisprudence",
+  "Conflict Resolution and Mediation",
+  "Project Management",
+  "Leadership and Organizational Behavior",
+  "Personal Development and Well-Being",
+  "Nutrition and Dietetics",
+  "Sports Science and Performance",
+  "Coaching and Training Techniques"]
+
+
+suggestion= document.querySelector(".suggestion")
+courseName=document.querySelector("#courseName")
+courseName.addEventListener("input",function k(){
+
+if (courseName.value!==""){
+    const filteredCourses=Courses.filter(e=>e.toLowerCase().includes(courseName.value.toLowerCase())).slice(0,5)
+    if (filteredCourses.length!==0){
+
+    
+    suggestion.innerHTML="<ul>"
+
+    for (let i=0;i<filteredCourses.length;i++) {
+        suggestion.innerHTML+=`<li>${filteredCourses[i]}</li>`
+    
+        }
+    suggestion.innerHTML+="</ul>"
+    }else{
+    suggestion.innerHTML=""
+        
+    }
+
+
+
+    document.querySelectorAll(".suggestion li").forEach(e=>addEventListener("click",(e)=>{
+        courseName.value=e.target.innerText
+        courseName.focus()
+   
+    }))
+
+
+}
+else{
+    suggestion.innerHTML=""
+
+}
+})
+
+     */
+    });
+  </script>
+</body>
+{% endblock %}

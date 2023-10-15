@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: transparent; 
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px 50px 20px ;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+}
+
+.group-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+
+}
+
+.group-links li {
+    margin-right: 20px;
+}
+
+.group-links a {
+    text-decoration: none;
+    color: #fff;
+}
+.links{
+    font-size: larger;
+
+}
+
+.night-mode-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.get-started-button a {
+    background-color: #2196F3;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.get-started-button a:hover {
+    background-color: #0e7bf2;
+}
+.dark-mode {
+    background-color: #000;
+    color: #fff;
+}
+.container{
+    display: flex;
+    font-family: 'Autour One', cursive;
+    
+}
+.left-container{
+    padding:10px 80px;
+    flex-grow: 2;
+    font-size:90px;
+
+}
+
+.text-right{
+    margin-right:40px ;
+    text-align: right;
+}
+.text-center{
+    text-align: center;
+}
+.text-left{
+    margin-left:40px;
+
+    text-align: left;
+    display: inline;  
+
+    
+}
+.text-border{
+    display: inline-block;
+    padding:5px 20px;
+    font-size: 40px;
+    border-radius: 60px;
+    border: 2px solid ;
+
+    
+}
+.right-container{
+    margin-right:20px ;
+    flex-grow: 2;
+    background: #000;
+    border-radius: 40px;
+    background: linear-gradient(to top right,black,white,black);
+
+}
+
+
+
+
+</style>
+    
+<nav class="navbar">
+    <div class="logo">
+        <img src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png" alt="Logo">
+    </div>
+    <div class="nav-group">
+        <ul class="group-links links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+    <div class="nav-group">
+        <ul class="group-links">
+            <li class="night-mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" class="dark-mode-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </li>
+            <li class="get-started-button"><a href="/courses">Get Started</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+
+    <div class="left-container">
+        <p class="text-right">
+            REVOLUTIONIZE
+        </p>
+        <p class="text-left">
+           LEARNING <p class="text-border">WITH</p>
+        </p>
+        <p class="text-center">
+            AI-DRIVEN
+        </p>
+        <p class="text-right">
+            EDUCATION
+        </p>
+    </div>
+    <div class="right-container"></div>
+</div>
+<script>
+    const darkModeToggle = document.querySelector('.dark-mode-toggle');
+    const body = document.body;
+
+    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+
+    if (isDarkMode) {
+        body.classList.add('dark-mode');
+        document.querySelector(".text-border").style.borderColor="white"
+        darkModeToggle.checked = true;
+    }
+    else{
+        darkModeToggle.checked=false
+
+        document.querySelector(".text-border").style.borderColor="black"
+        document.querySelectorAll(".links a").forEach(tag=>tag.style.color="black")
+
+    }
+
+    darkModeToggle.addEventListener('change', () => {
+       
+        if (darkModeToggle.checked) {
+            body.classList.add('dark-mode');
+        document.querySelector(".text-border").style.borderColor="white"
+
+            document.querySelectorAll(".links a").forEach(tag=>tag.style.color="white")
+
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+        document.querySelector(".text-border").style.borderColor="black"
+
+            document.querySelectorAll(".links a").forEach(tag=>tag.style.color="black")
+            body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', null);
+        }
+    });
+</script>
+
+
+
+{% endblock %}
+<!-- font-family: 'Autour One', cursive; -->

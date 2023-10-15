@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* CSS styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+      .navbar {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+
+      .logo img {
+        height: 40px;
+      }
+
+      .flex-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 10px;
+        background-color: #fff;
+        border: 2px solid #ccc;
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .text-small {
+        font-size: 1rem;
+        text-align: center;
+        color: #888;
+      }
+
+      .text-large {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+
+      .text-secondary {
+        color: #777;
+        font-style: italic;
+      }
+
+      .text-secondary-light {
+        color: #aaa;
+      }
+
+      .text-medium {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .unitGenerating {
+        margin-top: 20px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .button:hover {
+        background-color: #555;
+      }
+
+      .button.secondary {
+        background-color: #777;
+      }
+
+      .button.secondary:hover {
+        background-color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <img
+          src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png"
+          alt="Logo"
+        />
+      </div>
+    </nav>
+    <div class="flex-container">
+      <h1 class="course-name text-large">{{ courseName }}</h1>
+      <div class="text-small">
+        Generating chapters for each of your units. Look over them and then
+        click the button to confirm and continue.
+      </div>
+      <div class="unitGenerating"></div>
+
+      <div class="flex items-center justify-center mt-4">
+        <div class="flex items-center mx-4">
+          <a href="/addCourse" class="button secondary">
+            <span class="w-4 h-4 mr-2">Back</span>
+          </a>
+          <button
+            href="/course/"
+            class="Generate button secondary ml-4 font-semibold"
+          >
+            <span>Generate</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      let unitData=[]
+      window.onload = async () => {
+        const eventSource = new EventSource("/streamUnit/");
+
+        eventSource.onmessage = (event) => {
+          let data = event.data;
+          data = JSON.parse(data);
+          unitData.push(data)
+
+          let chapterDiv = "";
+          data.chapters.forEach((ch) => {
+            chapterDiv += `<div style="font-size: 1.2rem; font-weight: bold; color: #333; background-color: #f0f0f0; padding: 10px; margin: 10px">${ch.title}</div>`;
+          });
+
+          const unitGenerating = document.querySelector(".unitGenerating");
+
+          unitGenerating.innerHTML += `<div><p style="font-size: 2rem; font-weight: bold; color: #0073e6">${data.title}</p><div>${chapterDiv}</div></div>`;
+        };
+        eventSource.onerror = (error) => {
+          eventSource.close();
+        };
+
+        eventSource.addEventListener("error", (event) => {
+          eventSource.close();
+        });
+      };
+
+     
+    </script>
+
+    <script>
+      const courseName=document.querySelector(".course-name").innerText
+
+      const GenerateButton = document.querySelector(".Generate");
+      GenerateButton.addEventListener("click", async () => {
+        console.log(unitData)
+        const res = fetch("/addToDB/", { method: "post",
+        body:JSON.stringify({courseName,unitData})
+      })
+          .then((response) => {
+            if (response.status==400){
+              throw new Error()
+            }
+            return response.json();
+          })
+          .then((data) => {
+            location.href="/course/"+data.courseID
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      });
+    </script>
+  </body>
+</html>

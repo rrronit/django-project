@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+  }
+
+  body{
+    background-color: black;
+
+  }
+  .navbar {
+    background-color: black;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .logo img {
+    width: 40px;
+  }
+
+  .body-container {
+
+    padding:0 80px;
+    margin: 0 auto;
+    width: 80%;
+
+  }
+
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Display three courses in one row */
+    grid-gap: 20px;
+  }
+
+  .course-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s; /* Add a transition for all properties on hover */
+  }
+
+  .course-card a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .course-card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .course-card:hover {
+    background-color: #f0f0f0; /* Change background color on hover */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.4); /* Increase the box shadow on hover */
+    transform: scale(1.05); /* Slightly scale up the card on hover */
+  }
+
+  /* Enhanced button styling */
+  .add-course-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s; /* Smooth transition on hover */
+  }
+
+  .add-course-button:hover {
+    background-color: #0056b3;
+  }
+
+  .center-button {
+    text-align: center;
+    margin-top: 20px; /* Add some spacing above the button */
+  }
+  .container {
+  position: relative;
+  font-family: sans-serif;
+
+}
+
+.container .box {
+  width: 15rem;
+  height: 16rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.074);
+  border: 1px solid rgba(255, 255, 255, 0.222);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: .7rem;
+  transition: all ease .3s;
+}
+
+.container .box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.container .box .title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color:white
+}
+
+.container .box div img {
+  width: 100%;
+}
+
+.container .box div p {
+  margin: 0;
+  font-size: .9em;
+  font-weight: 300;
+  letter-spacing: .1em;
+}
+
+.container .box div span {
+  font-size: .7rem;
+  font-weight: 300;
+}
+
+.container .box div span:nth-child(3) {
+  font-weight: 500;
+  margin-right: .2rem;
+}
+
+.container .box:hover {
+  box-shadow: 0px 0px 20px 1px #ffbb763f;
+  border: 1px solid rgba(255, 255, 255, 0.454);
+}
+
+a{
+  text-decoration: none;
+}
+</style>
+<nav class="navbar">
+  <div class="logo">
+    <img src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png" alt="Logo">
+  </div>
+ 
+</nav>
+<div class="body-container">
+  {% if courses %}
+  
+  <div class="course-grid">
+
+    {% for course in courses %}
+      <div class="container">
+        <a href="/course/{{ course.id }}">
+
+      <div class="box">
+          <span class="title">{{ course.name }}</span>
+          <div>
+            <img src="{{ course.image }}" alt="Picture of the course" />
+              
+          </div>
+      </div>
+    </a>
+
+  </div>
+
+
+    {% endfor %}
+    
+  </div>
+  {% endif %}
+  <div class="center-button">
+    <a href="/addCourse" class="add-course-button">Add Course</a>
+  </div>
+</div>
+{% endblock %}
