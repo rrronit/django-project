@@ -1,187 +1,195 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-         body{
-            background-color: black;
-            display: grid;
-            place-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .content {
-  width: 330px;
-  padding: 40px 30px;
-  background:#ece5f0;
-  border-bottom-right-radius: 10px;
-  border-top-right-radius: 10px; 
-  display: flex;
-  flex-direction: column;  
-  justify-content: center; 
-  align-items: center;      
+{% extends "registration/rain.html" %}
+{% block content %}
+<style>
+    
+  body{
+      background-color: black;
+      display: grid;
+      place-content: center;
+      height: 100vh;
+      overflow: hidden;
+  }
+  
+  .content {
+width: 330px;
+padding: 0 30px;
+background:transparent;
+border: 2px solid white;
+border-left: none;
+border-bottom-right-radius: 10px;
+border-top-right-radius: 10px; 
+display: flex;
+flex-direction: column;  
+justify-content: center; 
+align-items: center; 
+height: 81vh;  
+
 }
 
 .content .text {
-  font-size: 33px;
-  font-weight: 600;
-  margin-bottom: 35px;
-  color: #595959;
-  text-align: center;
+font-size: 33px;
+font-weight: 600;
+margin-bottom: 35px;
+color: white;
+text-align: center;
 }
 
 .field {
-  height: 50px;
-  width: 100%;
-  margin-top: 20px;
-  display: flex;
-  position: relative;
+height: 50px;
+width: 100%;
+margin-top: 20px;
+display: flex;
+position: relative;
 }
 
 .field:nth-child(2) {
-  margin-top: 20px;
+margin-top: 20px;
 }
 
 .field .input {
-  height: 100%;
-  width: 100%;
-  padding-left: 45px;
-  outline: none;
-  border: none;
-  font-size: 18px;
-  background: #eee3dc;
-  color: #595959;
-  border-radius: 25px;
-  box-shadow: inset 2px 2px 5px #BABECC,
-              inset -5px -5px 10px #ffffff73;
+height: 100%;
+width: 100%;
+padding-left: 45px;
+outline: none;
+border: none;
+font-size: 18px;
+background: transparent;
+color: white;
+border-radius: 25px;
+border: 2px solid white;
 }
 
 .field .input:focus {
-  box-shadow: inset 1px 1px 2px #BABECC,
-              inset -1px -1px 2px #ffffff73;
+box-shadow: inset 1px 1px 2px #BABECC,
+        inset -1px -1px 2px #ffffff73;
 }
 
 .field .span {
-  position: absolute;
-  color: #595959;
-  width: 50px;
-  line-height: 55px;
+position: absolute;
+color: #595959;
+width: 50px;
+line-height: 55px;
 }
 
 .field .label {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 45px;
-  pointer-events: none;
-  color: #666666;
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+left: 45px;
+pointer-events: none;
+color: #666666;
 }
 
 .field .input:valid ~ label {
-  opacity: 0;
+opacity: 0;
 }
 
 .forgot-pass {
-  text-align: left;
-  margin: 10px 0 10px 5px;
+text-align: left;
+margin: 10px 0 10px 5px;
 }
 
 .forgot-pass a {
-  font-size: 16px;
-  color: #666666;
-  text-decoration: none;
+font-size: 16px;
+color: #666666;
+text-decoration: none;
 }
 
 .forgot-pass:hover a {
-  text-decoration: underline;
+text-decoration: underline;
 }
 
 .button {
-  margin: 15px 0;
-  width: 100%;
-  height: 50px;
-  font-size: 18px;
-  line-height: 50px;
-  font-weight: 600;
-  background: #eee3dc;
-  border-radius: 25px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: #595959;
-  box-shadow: 2px 2px 5px #BABECC,
-             -5px -5px 10px #ffffff73;
+margin: 15px 0;
+width: 100%;
+height: 50px;
+font-size: 18px;
+line-height: 50px;
+font-weight: 600;
+background: transparent;
+border-radius: 25px;
+border: 2px solid white;
+outline: none;
+cursor: pointer;
+color: white;
 }
 
 .button:focus {
-  color: #3498db;
-  box-shadow: inset 2px 2px 5px #BABECC,
-             inset -5px -5px 10px #ffffff73;
+color: #3498db;
+box-shadow: inset 2px 2px 5px #BABECC,
+       inset -5px -5px 10px #ffffff73;
 }
 
 .sign-up {
-  margin: 10px 0;
-  color: #595959;
-  font-size: 16px;
+margin: 10px 0;
+color:white;
+font-size: 16px;
 }
 
 .sign-up a {
-  color: #3498db;
-  text-decoration: none;
+color: #3498db;
+text-decoration: none;
 }
 
 .sign-up a:hover {
-  text-decoration: 
-  underline;
+text-decoration: 
+underline;
 }
 video{
-    height: 81vh;
-    width: 50vh;
-    object-fit: cover;
-    
-    border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px; 
+height: 81vh;
+width: 50vh;
+object-fit: cover;
+filter:grayscale(1)  ;
+border-bottom-left-radius: 10px;
+border-top-left-radius: 10px; 
+border: 2px solid white;
+border-right: none;
 }
 .container{
-    display: flex;
-    
-}
+width: 100%;
+height: 100%;
+display: flex;
+position: relative;
+z-index: 3;
+justify-content: center;
+align-items: center;
 
+
+}
 
 
 
 
 /*toast*/
 .toast {
-  top: 20px;
-  right:-1000px;
-  transition: right .5s ease-in ;
-  background-color: #eee3dc;
-  color: #595959;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: absolute;
+top: 20px;
+right:-1000px;
+transition: right .5s ease-in ;
+background-color: #eee3dc;
+color: #595959;
+padding: 10px;
+border-radius: 5px;
+box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: absolute;
 }
 
 .toast-icon svg {
-  width: 50px;
-  height: 20px;
-  fill: #595959;
-  
+width: 50px;
+height: 20px;
+fill: #595959;
+
 }
 
 .toast-content {
-  font-family: Arial, sans-serif;
-  font-size: 18px;
+font-family: Arial, sans-serif;
+font-size: 18px;
 }
-    </style>
-</head>
+
+</style>
+
 <body>
     <div class="container">
     <video src="https://cdn.dribbble.com/uploads/48292/original/30fd1f7b63806eff4db0d4276eb1ac45.mp4?1689187515" autoplay muted loop></video>
@@ -213,16 +221,16 @@ video{
     </div>
 
 
-
     <div class="toast">
         <div class="toast-content">
    
         </div>
         <div class="toast-icon">
            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0zM9 6a1 1 0 112 0v4a1 1 0 11-2 0V6zm1 9a1 1 0 100-2 1 1 0 000 2z" fill="#595959"></path></g></svg>     </div>
-       </div>
+    </div>
 
-       <script>
+
+    <script>
         const showToast=(message)=>{
             document.querySelector(".toast-content").innerText=message
                 document.querySelector(".toast").style.right="20px"
@@ -241,6 +249,8 @@ video{
             showToast(error)
         }
     </script> 
+
+
     <script>
         //front
         document.querySelector(".button").addEventListener("click",()=>{
@@ -265,5 +275,4 @@ video{
             }
         })
     </script>  
-</body>
-</html>
+{% endblock %}

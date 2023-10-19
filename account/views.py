@@ -6,11 +6,15 @@ import re
 # Create your views here.
 
 def register(req):
+    #user=req.user
+    #if user.is_authenticated:
+    #   return redirect("/")
     
     if req.method =='POST':
        
+       
        username=req.POST['f_name']
-       email=req.POST['mail']
+       email=req.POST['mail'].lower()
        password=req.POST['pass']
        
        if  len(username)<3 or len(username)>25:
@@ -43,9 +47,10 @@ def register(req):
         user.save()
         auth.login(req,user)
 
-       response=render(req,'home.html')
+       response=redirect('/')
        response.set_cookie("username_id",user.id)
        return response
+       #return render(req,'home.html')
     
     
     else:
@@ -56,10 +61,13 @@ def register(req):
      return render(req,'registration/register.html',{"error":error})
 
 def login(req):
+    #user=req.user
+    #if user.is_authenticated:
+    #   return redirect("/")
     if req.method =='POST':
        
        
-       email=req.POST['email']
+       email=req.POST['email'].lower()
        password=req.POST['password']
     
 
@@ -82,7 +90,7 @@ def login(req):
 
           if user is not None:
                 auth.login(req,user)
-                response=render(req,'home.html')
+                response=redirect('/')
                 response.set_cookie("username_id",user.id)
                 return response
           else:
