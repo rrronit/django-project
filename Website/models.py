@@ -5,6 +5,8 @@ class Course(models.Model):
     id = models.CharField(primary_key=True, max_length=255, unique=True)
     name = models.CharField(max_length=255)
     image = models.CharField(max_length=255)
+    userId=models.IntegerField(null=True, blank=True)
+    
 
 
 class Unit(models.Model):

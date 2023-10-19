@@ -2,247 +2,902 @@
 {% block content %}
 <style>
     
+    @font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: local("Roboto Thin"), local("Roboto-Thin"), url(https://fonts.gstatic.com/s/roboto/v15/Jzo62I39jc0gQRrbndN6nfesZW2xOQ-xsNqO47m55DA.ttf) format("truetype"); }
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local("Roboto Light"), local("Roboto-Light"), url(https://fonts.gstatic.com/s/roboto/v15/Hgo13k-tfSpn0qi1SFdUfaCWcynf_cDxXwCLxiixG1c.ttf) format("truetype"); }
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/s/roboto/v15/zN7GBFwfMP4uA6AR0HCoLQ.ttf) format("truetype"); }
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local("Roboto Medium"), local("Roboto-Medium"), url(https://fonts.gstatic.com/s/roboto/v15/RxZJdnzeo3R5zSexge8UUaCWcynf_cDxXwCLxiixG1c.ttf) format("truetype"); }
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Roboto Bold"), local("Roboto-Bold"), url(https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOKCWcynf_cDxXwCLxiixG1c.ttf) format("truetype"); }
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 400;
+  src: local("Roboto Italic"), local("Roboto-Italic"), url(https://fonts.gstatic.com/s/roboto/v15/W4wDsBUluyw0tK3tykhXEfesZW2xOQ-xsNqO47m55DA.ttf) format("truetype"); }
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Roboto Mono"), local("RobotoMono-Regular"), url(https://fonts.gstatic.com/s/robotomono/v4/hMqPNLsu_dywMa4C_DEpY50EAVxt0G0biEntp43Qt6E.ttf) format("truetype"); }
+
+
     * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-decoration: none;
 }
-
+body{
+    background: #000;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .navbar {
-    background-color: transparent; 
-    color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px 50px 20px ;
 }
 
-.logo img {
-    height: 40px;
-}
 
-.nav-group {
-    display: flex;
-    align-items: center;
-}
+
 
 .group-links {
+    margin-top: 15px;
     list-style: none;
     display: flex;
-    align-items: center;
+ 
 
 }
 
+.nav-logo{
+    
+    filter: brightness(0.7) invert(1);
+    mix-blend-mode: luminosity;
+    height: 40px;
+}
 .group-links li {
     margin-right: 20px;
 }
 
 .group-links a {
     text-decoration: none;
+    color: #626262;
+
+}
+.group-links a:hover{
     color: #fff;
 }
-.links{
-    font-size: larger;
 
-}
-
-.night-mode-toggle {
+.header{
+    margin-top: 90px;
+    height: 80vh;
+    color: white;  
     display: flex;
-    align-items: center;
+    flex-direction: column;
+align-items: center; 
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
+.header h1{
+  font-size: 72px;
+  will-change: transform;
+  font-weight: 200;
+  position: relative;
+  z-index: 50; 
+
+  letter-spacing:  clamp(-1.75px, -0.25vw, -3.5px);
+  position: relative;
+  overflow: hidden;
+  background: #000000;
+  margin: 0;
 }
 
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+
+.aurora {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  mix-blend-mode: darken;
+  pointer-events: none;
 }
 
-.slider {
-    position: absolute;
-    cursor: pointer;
+.aurora__item {
+  overflow: hidden;
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  background-color: #00c2ff;;
+  border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  filter: blur(1rem);
+  mix-blend-mode: overlay;
+}
+
+.aurora__item:nth-of-type(1) {
+  top: -50%;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-1 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(2) {
+  background-color: #ffc640;
+  right: 0;
+  top: 0;
+  animation: aurora-border 4s ease-in-out infinite,
+    aurora-2 8s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(3) {
+  background-color:  #33ff8c;
+  left: 0;
+  bottom: 0;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-3 8s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(4) {
+  background-color: #e54cff;
+  right: 0;
+  bottom: -50%;
+  animation: aurora-border 6s ease-in-out infinite,
+    aurora-4 24s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-1 {
+  0% {
     top: 0;
-    left: 0;
     right: 0;
+  }
+
+  50% {
+    top: 100%;
+    right: 75%;
+  }
+
+  75% {
+    top: 100%;
+    right: 25%;
+  }
+
+  100% {
+    top: 0;
+    right: 0;
+  }
+}
+
+@keyframes aurora-2 {
+  0% {
+    top: -50%;
+    left: 0%;
+  }
+
+  60% {
+    top: 100%;
+    left: 75%;
+  }
+
+  85% {
+    top: 100%;
+    left: 25%;
+  }
+
+  100% {
+    top: -50%;
+    left: 0%;
+  }
+}
+
+@keyframes aurora-3 {
+  0% {
     bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 20px;
+    left: 0;
+  }
+
+  40% {
+    bottom: 100%;
+    left: 75%;
+  }
+
+  65% {
+    bottom: 40%;
+    left: 50%;
+  }
+
+  100% {
+    bottom: 0;
+    left: 0;
+  }
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+@keyframes aurora-4 {
+  0% {
+    bottom: -50%;
+    right: 0;
+  }
+
+  50% {
+    bottom: 0%;
+    right: 40%;
+  }
+
+  90% {
+    bottom: 50%;
+    right: 25%;
+  }
+
+  100% {
+    bottom: -50%;
+    right: 0;
+  }
 }
 
-input:checked + .slider {
-    background-color: #2196F3;
+@keyframes aurora-border {
+  0% {
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
+
+  25% {
+    border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
+  }
+
+  50% {
+    border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+  }
+
+  75% {
+    border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
+  }
+
+  100% {
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+  }
 }
 
-input:checked + .slider:before {
-    transform: translateX(20px);
+.header >h2{
+    font-size: 50px;
+    font-weight:lighter;
+    position: relative;
+  z-index: 50; 
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 100;
+  line-height: 1.2;
 }
 
-.get-started-button a {
-    background-color: #2196F3;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: bold;
-    transition: background-color 0.3s;
+.button-fill,.button-line{
+    margin: 30px 5px;
+    font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+  padding: 10px 16px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 3px;
+ width: 160px;
+  min-width: 120px; 
 }
+.button-fill{
+    background:white;
+  color: black;
 
-.get-started-button a:hover {
-    background-color: #0e7bf2;
+
 }
-.dark-mode {
-    background-color: #000;
-    color: #fff;
+.button-line{
+    background:transparent;
+    border: 1px solid white;
+    color: white;
+    box-sizing: border-box;
 }
-.container{
+.button-fill:hover,.button-line:hover{
+    background: rgb(5, 134, 255);
+    color: white;
+}
+.featured-courses {
     display: flex;
-    font-family: 'Autour One', cursive;
-    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
 }
-.left-container{
-    padding:10px 80px;
-    flex-grow: 2;
-    font-size:90px;
+.featured-courses h1{
+    font-size: 72px;
+}
 
+.featured-courses p{
+    font-size: 25px;
+    color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+  line-height: 1.2;
+  text-align: center;
+  margin: 5px
+
+
+;
+}
+.course-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.text-right{
-    margin-right:40px ;
-    text-align: right;
-}
-.text-center{
+.course {
+    height: 300px;
+    margin: 20px;
+    width: 300px;
+    padding: 20px;
+    background: #222;
     text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
 }
-.text-left{
-    margin-left:40px;
 
-    text-align: left;
-    display: inline;  
-
-    
+.course img {
+    max-width: 100%;
+    margin-bottom: 10px;
 }
-.text-border{
+
+.course h3 {
+    font-size: 20px;
+    margin: 10px 0;
+    color: #fff;
+}
+
+.course a {
     display: inline-block;
-    padding:5px 20px;
-    font-size: 40px;
-    border-radius: 60px;
-    border: 2px solid ;
-
-    
-}
-.right-container{
-    margin-right:20px ;
-    flex-grow: 2;
-    background: #000;
-    border-radius: 40px;
-    background: linear-gradient(to top right,black,white,black);
-
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s;
 }
 
 
+/* Remove course description */
+.course p {
+    display: none;
+}
 
+
+/* Testimonials Section */
+.testimonials {
+
+    margin: 100px auto;
+	display: flex;
+    flex-direction: column;
+	align-items: center;
+	justify-content: center;
+    color: white;
+}
+
+.testimonials h1{
+    font-size: 72px;
+    color: white;
+}
+.testimonials ul {
+  padding: 0;
+  margin: 0;
+}
+
+.testimonials button {
+  background-color: transparent;
+  border: none;
+  width: 65px;
+  padding: 20px;
+  transition: opacity 200ms;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate3d(0, -50%, 0);
+  z-index: 2;
+}
+.testimonials button svg {
+  fill: #fafafa;
+}
+.testimonials button:hover, button:focus {
+  opacity: 0.6;
+}
+
+.testimonials .button--next {
+  left: auto;
+  right: 0;
+  transform: translate3d(0, -50%, 0) rotate(180deg);
+}
+
+
+
+
+.testimonial {
+    text-align: center;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 300px;
+}
+
+
+.slide__list {
+	width: calc(100vw - 40px);
+    height: 350px;
+	
+	font-family: Lato, sans-serif;
+
+	&::before,
+	&::after {
+		content: "";
+		width: 180px;
+		height: 100%;
+		display: block;
+		position: absolute;
+		top: 0;
+		z-index: 1;
+	}
+
+	&::before {
+		left: 0;
+background-color: #000;	}
+
+	&::after {
+		right: 0;
+background-color: #000;	}
+}
+
+.slide__item {
+	width: 100%;
+	height: 200px;
+	padding: 40px 65px;
+    margin-top: 80px;
+	text-align: center;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+
+	> * {
+		width: 100%;
+	}
+}
+
+.slide__heading,
+.slide__quote,
+.slide__cite {
+	opacity: 0;
+	animation-timing-function: var(--originalCurve);
+	width: calc(100% - 120px);
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.slide__heading {
+	--delay: 300ms;
+
+
+	text-transform: uppercase;
+	font-size: 1.2rem;
+	letter-spacing: 0.05em;
+    margin-bottom: 20px;
+}
+
+.slide__quote {
+	--delay: 420ms;
+
+	font-size: 1.1rem;
+	line-height: 1.4;
+	letter-spacing: 0.03em;
+}
+
+.slide__cite {
+	--delay: 540ms;
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.603);
+
+	display: block;
+}
+
+
+[data-carousel] {
+	position: relative;
+}
+
+.Wallop-list {
+	position: relative;
+	overflow: hidden;
+}
+
+.Wallop-item {
+	--x1: 0.1;
+	--y1: 0.67;
+	--x2: 0.29;
+	--y2: 0.98;
+
+	--originalCurve: cubic-bezier(var(--x1), var(--y1), var(--x2), var(--y2));
+	--reversedCurve: cubic-bezier(
+		calc(1 - var(--x2)),
+		calc(1 - var(--y2)),
+		calc(1 - var(--x1)),
+		calc(1 - var(--y1))
+	);
+
+	--length: 1300ms;
+
+	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.Wallop-item--current {
+	visibility: visible;
+	position: relative;
+
+	.slide__heading,
+	.slide__quote,
+	.slide__cite {
+		animation: slideIn var(--length) forwards var(--originalCurve);
+	}
+}
+
+.Wallop-item--showPrevious {
+	.slide__heading,
+	.slide__quote,
+	.slide__cite {
+		animation: slideOut var(--length) var(--delay) forwards reverse
+			var(--reversedCurve);
+	}
+}
+
+.Wallop-item--showNext {
+	.slide__heading,
+	.slide__quote,
+	.slide__cite {
+		animation: slideIn var(--length) var(--delay) forwards var(--originalCurve);
+	}
+}
+
+.Wallop-item--hidePrevious,
+.Wallop-item--hideNext {
+	--length: 500ms;
+	visibility: visible;
+}
+
+.Wallop-item--hidePrevious {
+	.slide__heading,
+	.slide__quote,
+	.slide__cite {
+		animation: slideOut var(--length) forwards var(--originalCurve);
+	}
+}
+
+.Wallop-item--hideNext {
+	.slide__heading,
+	.slide__quote,
+	.slide__cite {
+		animation: slideIn var(--length) forwards reverse var(--reversedCurve);
+	}
+}
+
+/* Custom keyframe animation */
+
+@keyframes slideIn {
+	0% {
+		transform: translate3d(50%, 0, 0);
+		opacity: 0;
+	}
+	100% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideOut {
+	0% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+	100% {
+		transform: translate3d(-50%, 0, 0);
+		opacity: 0;
+	}
+}
+
+
+.supported-logos {
+            margin-top: 100px;
+            
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 4px;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.5;
+            color: white;
+            margin:10px;
+        }
+
+        .logos-grid {
+            display: flex;
+            gap: 1rem;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .supported-logos  .logo {
+            height: 5rem;
+            border-radius: 8px;
+            opacity: 0.5;
+            box-shadow: none;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            filter: grayscale(0);
+        }
+
+
+       
+
+/* Footer */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
 
 </style>
-    
 <nav class="navbar">
-    <div class="logo">
-        <img src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png" alt="Logo">
-    </div>
-    <div class="nav-group">
-        <ul class="group-links links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </div>
-    <div class="nav-group">
-        <ul class="group-links">
-            <li class="night-mode-toggle">
-                <label class="switch">
-                    <input type="checkbox" class="dark-mode-toggle">
-                    <span class="slider round"></span>
-                </label>
-            </li>
-            <li class="get-started-button"><a href="/courses">Get Started</a></li>
-        </ul>
-    </div>
+    <div class="logo"><a href="https://framerjs.com/"><img class="nav-logo" src="https://clipart-library.com/new_gallery/143492_infinity-sign-png.png" ></a></div>
+
+    <ul class="group-links">
+
+        <li class=""><a href="https://framerjs.com/examples/">Home</a></li>
+        <li class=""><a href="https://framerjs.com/learn/basics/">All Courses</a></li>
+        <li class=" resources"><a href="https://framerjs.com/resources/">Add Course</a></li>
+    </ul>
 </nav>
-<div class="container">
 
-    <div class="left-container">
-        <p class="text-right">
-            REVOLUTIONIZE
-        </p>
-        <p class="text-left">
-           LEARNING <p class="text-border">WITH</p>
-        </p>
-        <p class="text-center">
-            AI-DRIVEN
-        </p>
-        <p class="text-right">
-            EDUCATION
-        </p>
-    </div>
-    <div class="right-container"></div>
-</div>
-<script>
-    const darkModeToggle = document.querySelector('.dark-mode-toggle');
-    const body = document.body;
 
-    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
 
-    if (isDarkMode) {
-        body.classList.add('dark-mode');
-        document.querySelector(".text-border").style.borderColor="white"
-        darkModeToggle.checked = true;
-    }
-    else{
-        darkModeToggle.checked=false
+<div class="header">
 
-        document.querySelector(".text-border").style.borderColor="black"
-        document.querySelectorAll(".links a").forEach(tag=>tag.style.color="black")
+    <h1 class="fadeInBottom">Start Your Learning Journey
+        <div class="aurora">
+            <div class="aurora__item"></div>
+            <div class="aurora__item"></div>
+            <div class="aurora__item"></div>
+            <div class="aurora__item"></div>
+          </div>
+    </h1>
+    <h2 class="second-headline fadeInBottom">Experience a New Way to Learn</h2>
 
-    }
-
-    darkModeToggle.addEventListener('change', () => {
+    <div class="pivot-buttons fadeInBottom">
+        {% if user.is_authenticated %}
+        <a class="button-fill blue" href="/courses">
+            Your Courses
+        </a>
+            {% else %}
+        <a class="button-fill blue" href="/login">
+            Login
+        </a>
+        {% endif %}
        
-        if (darkModeToggle.checked) {
-            body.classList.add('dark-mode');
-        document.querySelector(".text-border").style.borderColor="white"
+            {% if user.is_authenticated %}
+            <a class="button-line white" href="/courses#add">
+            Add Course
+            </a>
+            {% else %}
+            <a class="button-line white" href="/register">
+             Register
+            </a>
+            {% endif %}
+            
+    </div>
 
-            document.querySelectorAll(".links a").forEach(tag=>tag.style.color="white")
+<div class="supported-logos">
+    <h2 class="section-title">Supported by</h2>
+    <div class="logos-grid">
+        <a href="https://cal.com/?ref=trpc" target="_blank" rel="noopener" title="Cal.com, Inc.">
+            <img class="logo" src="https://avatars.githubusercontent.com/u/79145102?v=4" alt="Cal.com, Inc.">
+        </a>
+        <a href="https://www.tesla.com" target="_blank" rel="noopener" title="Tola">
+            <img class="logo" src="https://i.pinimg.com/originals/15/77/30/1577300000e1168cd44d3e33e6446adc.png
+            " alt="Tola">
+        </a>
+        <a href="https://flightcontrol.dev/?ref=trpc" target="_blank" rel="noopener" title="Flightcontrol">
+            <img class="logo" src="https://avatars.githubusercontent.com/u/87621213?v=4" alt="Flightcontrol">
+        </a>
+        <a href="http://www.google.co.in" target="_blank" rel="noopener" title="Jason Docton">
+            <img class="logo" src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-128.png" alt="Jason Docton">
+        </a>
+        <a href="http://echobind.com/?ref=trpc" target="_blank" rel="noopener" title="Echobind">
+            <img class="logo" src="https://avatars.githubusercontent.com/u/570840?v=4" alt="Echobind">
+        </a>
+       
+    </div>
+</div>
 
-            localStorage.setItem('darkMode', 'enabled');
-        } else {
-        document.querySelector(".text-border").style.borderColor="black"
 
-            document.querySelectorAll(".links a").forEach(tag=>tag.style.color="black")
-            body.classList.remove('dark-mode');
-            localStorage.setItem('darkMode', null);
-        }
-    });
+
+</div>
+</div>
+ <div class="featured-courses">
+        <h1>Explore Our Courses</h1>
+        <p>Discover a variety of courses you can generate</p>
+        <div class="course-container">
+            <div class="course">
+                <img src="course1-image.jpg" alt="Course 1">
+                <h3>Course Title 1</h3>
+                <a href="course1-details.html">Generate</a>
+            </div>
+
+        <!-- Course 2 -->
+        <div class="course">
+            <img src="course1-image.jpg" alt="Course 1">
+            <h3>Course Title 1</h3>
+            <a href="course1-details.html">Generate</a>
+        </div>
+        <div class="course">
+            <img src="course1-image.jpg" alt="Course 1">
+            <h3>Course Title 1</h3>
+            <a href="course1-details.html">Generate</a>
+        </div>
+    </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="testimonials">
+        <h1>Testimonials</h1>
+        <div data-carousel>
+            <ul class="slide__list Wallop-list">
+                <li class="slide__item Wallop-item Wallop-item--current">
+                    <h2 class="slide__heading">Narendra Modi</h2>
+    <blockquote>
+        
+        <p class="slide__quote">I attribute a significant part of my journey to this educational platform. It's a remarkable initiative that provided me with the knowledge and skills I needed to excel in my career. The engaging courses helped me understand various aspects of leadership and governance. Kudos to the team behind this exceptional learning portal!</p>
+        <cite class="slide__cite">Prime Minister of India</cite>
+    </blockquote>
+                </li>
+                <li class="slide__item Wallop-item">
+                    <h2 class="slide__heading">Sundar Pichai</h2>
+                    <blockquote>
+                        <p class="slide__quote">This platform played a pivotal role in my career development. The extensive selection of courses allowed me to gain a deep understanding of technology and business. I acquired valuable skills that eventually led me to become the CEO of Alphabet Inc. It's user-friendly and provides a seamless learning experience. I appreciate the efforts to make quality education accessible to all.</p>
+                        <cite class="slide__cite">CEO of Alphabet Inc. (Google)</cite>
+                    </blockquote>
+                </li>
+                <li class="slide__item Wallop-item">
+                    <h2 class="slide__heading">Tim Cook</h2>
+                    <blockquote>
+                        <p class="slide__quote">I believe in the power of learning, and this platform has been an integral part of my journey. The diverse courses it offers helped me understand technology, leadership, and innovation. I acquired the knowledge and skills necessary to lead Apple Inc. successfully. It's a fantastic resource for anyone looking to enhance their skills and explore new areas of expertise.</p>
+                        <cite class="slide__cite">CEO of Apple Inc.</cite>
+                    </blockquote>
+                </li>
+                <li class="slide__item Wallop-item">
+                    <h2 class="slide__heading">Elon Musk</h2>
+    <blockquote>
+        <p class="slide__quote">I've always been a lifelong learner, and this platform has been instrumental in my journey to success. The top-notch courses available here covered a wide spectrum of subjects, including technology, space exploration, and innovation. It's an excellent place for anyone who aspires to reach new heights in their personal and professional development. I'm genuinely impressed with the quality and accessibility.</p>
+        <cite class="slide__cite">CEO of SpaceX and Tesla, Inc.</cite>
+    </blockquote>
+                </li>
+                
+            </ul>
+            <button class="button--prev Wallop-buttonPrevious" title="previous">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.9 50.2"><path d="M25.1 50.2L0 25.1 25.1 0l2.8 2.8L5.7 25.1l22.2 22.2z"/></svg>
+            </button>
+            <button class="button--next Wallop-buttonNext" title="next">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.9 50.2"><path d="M25.1 50.2L0 25.1 25.1 0l2.8 2.8L5.7 25.1l22.2 22.2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+   
+
+   
+</div>
+
+
+
+<footer>
+    <ul class="footer-links">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+    </ul>
+    <p>&copy; 2023 Your Website. All rights reserved.</p>
+</footer>
+</div>
+
+<script>
+
+const slider = document.querySelector('[data-carousel]');
+const slides = [...document.querySelectorAll('.Wallop-item')]
+this.wallop = new Wallop(slider);
+
+let prev = 0
+
+const removePrevClasses = (index) => {
+	let prevClass
+	if (slides[index].classList.contains('Wallop-item--hidePrevious')) {
+		prevClass = 'Wallop-item--hidePrevious'
+	} else if (slides[index].classList.contains('Wallop-item--hideNext')) {
+		prevClass = 'Wallop-item--hideNext'
+	}
+	
+	if (prevClass) {
+		setTimeout(() => {
+		slides[index].classList.remove(prevClass)
+	}, 600)
+	}
+}
+
+const onChange = () => {
+	removePrevClasses(prev)
+	prev = this.wallop.currentItemIndex
+}
+
+this.wallop.on('change', onChange);
+
 </script>
 
 
 
 {% endblock %}
-<!-- font-family: 'Autour One', cursive; -->
+

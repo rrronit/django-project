@@ -41,11 +41,11 @@ def register(req):
        else:   
         user=User.objects.create_user(username=username,email=email,password=password)
         user.save()
+        auth.login(req,user)
 
        response=render(req,'home.html')
        response.set_cookie("username_id",user.id)
        return response
-       #return render(req,'home.html')
     
     
     else:

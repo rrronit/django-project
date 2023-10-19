@@ -57,37 +57,31 @@
           padding-bottom:4px ;
           margin-bottom: 10px ;
         }
-        /* Styles for the course list */
         .course-list {
             list-style: none;
             padding: 0;
         }
 
-        /* Styles for individual courses */
         .course {
             margin-bottom: 20px;
         }
 
-        /* Styles for course titles */
         .course h2 {
             font-size: 1.5rem;
             margin-bottom: 10px;
             color:rgb(103, 171, 248)
         }
 
-        /* Styles for the chapter list */
         .chapter-list {
             list-style: none;
             padding: 0;
         }
 
-        /* Styles for individual chapters */
         .chapter {
             margin-top: 8px;
             cursor: pointer;
         }
 
-        /* Styles for chapter links */
         .chapter a {
             text-decoration: none;
             color: white;
@@ -95,12 +89,10 @@
             transition: color 0.3s ease;
         }
 
-        /* Hover effect for chapter links */
         .chapter a:hover {
             color: #8abff8;
         }
 
-        /* Container for the main content */
         .chapter-container {
             display: flex;
             flex:3;
@@ -141,7 +133,7 @@
         }
       
         
-        .questions{
+        .questions-container{
           flex:1;
           margin:0 10px;
           padding: 10px;
@@ -151,15 +143,103 @@
 
 
         }
+        @keyframes rotate {
+	0% {
+		transform: rotate(0deg);
+	}
+	50% {
+		transform: rotate(180deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes rotate2 {
+	0% {
+		transform: rotate(0deg);
+		border-top-color: white;
+	}
+	50% {
+		transform: rotate(180deg);
+		border-top-color: rgb(103, 171, 248);
+	}
+	100% {
+		transform: rotate(360deg);
+		border-top-color: white;
+	}
+}
+
+
+
+
+
+.loader {
+	position: relative;
+	margin: 75px auto;
+	width: 150px;
+	height: 150px;
+	display: block;
+	overflow: hidden;
+}
+
+.loader div {
+	height: 100%;
+}
+
+/* loader 1 */
+.loader1, .loader1 div {
+	border-radius: 50%;
+	padding: 8px;
+	border: 2px solid transparent;
+	animation: rotate linear 3.5s infinite;
+	border-top-color: white;
+	border-bottom-color: rgb(103, 171, 248);
+}
+
+
+
+
+
+
+.loader1 div:hover {
+	animation-play-state: paused;
+}
+
+.loader, .loader * {
+	will-change: transform;
+}
+
+.questions{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.retry-button {
+    background-color: #007BFF; 
+    color: #fff; 
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  
+}
+
+.retry-button:hover {
+    background-color: #006bdd; /* Darker blue on hover */
+}
       
        
     </style>
 </head>
 <body>
     <nav class="navbar">
+      <a href="/">
         <div class="logo">
             <img src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png" alt="Logo">
         </div>
+      </a>
     </nav>
     <div class="container">
     <div class="sidebar">
@@ -190,12 +270,12 @@
             <div class="summary-container">
                 <p>Summary</p>
                 <div class="summary"></div>
-        </div>
+        </div>  
       </div>
-      <div class="questions">
+      <div class="questions-container">
         <h1>Quiz</h1>
+        <div class="questions"></div>
       </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const chapters = document.querySelectorAll(".chapter a");
@@ -206,13 +286,39 @@
             let currentlySelectedChapter = null;
 
             function loadChapterData(chapter) {
+                chapter.style.textDecoration="underline"
+
                 const videoId = chapter.getAttribute("data-video-id");
                 const chapterId = chapter.getAttribute("data-chapter-id");
 
                 iframe.src = "https://www.youtube.com/embed/" + videoId;
 
-                summaryDiv.innerText = "";
-                questionContainer.innerText = "";
+                summaryDiv.innerHTML = `<div class='loader loader1'>
+  <div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`
+                questionContainer.innerHTML = `<div class='loader loader1'>
+  <div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>` ;
 
                 fetch("/getVideoSummary/", {
                     method: "post",
@@ -221,14 +327,54 @@
                 .then((res) => res.json())
                 .then((data) => {
                     summaryDiv.innerText = data.summary;
+                    fetchQuestion(chapterId)
+                    
 
-                    fetch("/getVideoQuestions/", {
+                   
+                })
+                .catch((err) => console.error(err));
+            }
+
+            
+            chapters.forEach((chapter) => {
+                chapter.addEventListener("click", function (e) {
+                    currentlySelectedChapter.style.textDecoration="none"
+                    currentlySelectedChapter = this;
+                    loadChapterData(this);
+                });
+            });
+
+            if (chapters.length > 0) {
+                currentlySelectedChapter = chapters[0];
+                loadChapterData(currentlySelectedChapter);
+            }
+        });
+
+
+        const fetchQuestion=(chapterId)=>{
+          console.log(chapterId)
+          const Container = document.querySelector(".questions");
+          Container.innerHTML = `<div class='loader loader1'>
+  <div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>` ;          
+
+          fetch("/getVideoQuestions/", {
                         method: "post",
                         body: chapterId,
                     })
                     .then((res) => res.json())
                     .then((data) => {
-                        questionContainer.innerHTML="<h1>Quiz</h1>"+(data.questions
+                        Container.innerHTML=(data.questions
                         .map((question) => {
                             const options = question.options
                             .slice(1, question.options.length - 1)
@@ -253,31 +399,21 @@
                         })
                         .join(""));
                     })
-                    .catch((err) => console.error(err));
-                })
-                .catch((err) => console.error(err));
-            }
+                    .catch((err) => {
+                      Container.innerHTML=`
+                      <button onclick="fetchQuestion('${chapterId}')" style="margin-top:20px" class="retry-button">Retry Questions</button>
+                      `
+                    });
 
-            loadChapterData(chapters[0])
-            chapters.forEach((chapter) => {
-                chapter.addEventListener("click", function (e) {
-                 
-                    currentlySelectedChapter = this;
-                    loadChapterData(this);
-                });
-            });
+        }
 
-            // Initialize with the first chapter
-            if (chapters.length > 0) {
-                currentlySelectedChapter = chapters[0];
-                loadChapterData(currentlySelectedChapter);
-            }
-        });
-
+  
         const handleAnswer=(answer)=>{
           document.querySelector("."+answer).addEventListener("click",()=>{
             document.querySelector("."+answer).style.backgroundColor="transparent"
           })
+
+        
         }
     </script>
     </body>

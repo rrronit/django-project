@@ -18,43 +18,35 @@ def home(req):
     return render(req,'home.html',{}) 
 
 def allCourses(req):
-    courses=Course.objects.all()
-    allCourses=[]
-    for course in courses:
-        course={
-            "id":course.id,
-            "image":course.image,
-            "name":course.name
-        }
-        allCourses.append(course)
+    
+    currentUser=req.user
+    if currentUser.is_authenticated:
 
-    return render(req,"courses.html",{"courses":allCourses})
+        courses=Course.objects.filter(userId=currentUser.id)
+        allCourses=[]
+        for course in courses:
+            course={
+                "id":course.id,
+                "image":course.image,
+                "name":course.name
+            }
+            allCourses.append(course)
+
+        return render(req,"courses.html",{"courses":allCourses})
+    
+    return redirect("/login")
+    
+
 
 def addCourse(req): 
-    return render(req,"addCourse.html",{})
+    if req.method=="POST":
+        data=json.loads(req.body.decode("utf-8"))
+        courseName=data.get("courseName")
+        unitNames=data.get("units")
+        req.session["courseName"]=courseName
+        courses.append((courseName,unitNames))
+        return JsonResponse({"message":"done"})
 
-def processAddCourse(req):
-    data=json.loads(req.body.decode("utf-8"))
-    courseName=data.get("courseName")
-    unitNames=data.get("units")
-    req.session["courseName"]=courseName
-    courses.append((courseName,unitNames))
-    return JsonResponse({"message":"done"})
-
-
-    """ units=[]    
-    for unit in unitNames:
-        prompt="It is your job to create a course about "+unit+", the User has requested to create chapters for each of the units. Then for each chapter, provide a detailed youtube search query that can be used to find informative educational video for each chapter. Each query should give an educational informative course in youtube"
-        units.append(prompt)
-        
-    with concurrent.futures.ThreadPoolExecutor() as exc:
-   
-
-        res=[exc.submit(process_prompt,)for prompt in units]
-
-        for f in concurrent.futures.as_completed(res):
-            yield f.result()
-    """
 
 def streamUnit(req):
     if (len(courses)!=0):
@@ -62,7 +54,7 @@ def streamUnit(req):
         unitNames=courses[0][1]
         units=[]
         for unit in unitNames:
-            prompt="The User wants to pursue "+ courseName +"It is your job to create a course only about "+unit+", the User has requested to create chapters for each of the units. Then for each chapter, provide a detailed youtube search query that can be used to find informative educational video for each chapter. Each query should give an educational informative course in youtube"
+            prompt="The User wants to learn about "+ courseName +". It is your job to create a course only about "+unit+", the User has requested to create chapters for each of the units. Then for each chapter, provide a detailed youtube search query that can be used to find informative educational video for each chapter. Each query should give an educational informative course in youtube"
             units.append(prompt)
         
    
@@ -129,42 +121,44 @@ def course(req,courseId):
 @csrf_exempt
 def addCourseToDB(req):
     
+    currentUser=req.user
+    if (currentUser.username):
+        data=json.loads(req.body.decode("utf-8"))
+        courseName=data["courseName"]
+        units=data["unitData"]
+        if (courseName==""):
+            return HttpResponse("{'mes':'Not found'}",status=400)
+        if (len(units)!=3):
 
-    data=json.loads(req.body.decode("utf-8"))
-    courseName=data["courseName"]
-    units=data["unitData"]
-    if (courseName==""):
-        return HttpResponse("{'mes':'Not found'}",status=400)
-    if (len(units)!=3):
-
-        return HttpResponse('{"mes":"Not found"}',status=400)
-  
-    print("here")
-    courseImg=getImage(courseName)
-    course=Course(id=str(uuid4()),name=courseName.capitalize(),image=courseImg)
-    course.save()
-    
-    for unit in units:
-        newUnit=Unit(id=str(uuid4()),name=unit["title"],courseId=course.id,course=course)
-        newUnit.save()
-
-        for chapter in unit["chapters"]:
-            newChapter=Chapter(id=uuid4(),unitId=newUnit.id,name=chapter["title"],youtubeSearchQuery=chapter["youtube_query"],unit=newUnit)
-            newChapter.save()
-            
-        with concurrent.futures.ThreadPoolExecutor() as exc:
-            print(Chapter.objects.filter(unit=newUnit))
-            res=[exc.submit(searchYoutube,chapter) for chapter in Chapter.objects.filter(unitId=newUnit.id)]
-            for f in concurrent.futures.as_completed(res):
-                print(f.result())
-                
-            
-    
+            return HttpResponse('{"mes":"Not found"}',status=400)
         
-    
-    return JsonResponse({"courseID":course.id})
-    
-    
+        try:
+            courseImg=getImage(courseName)
+        except:
+            courseImg="https://imgs.search.brave.com/td8sI4KnqQOLjxGhhpHWvRi7r-MIvDsHtTEAMuTkGOw/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9sZWFybmluZy1v/bmxpbmUtY29uY2Vw/dC15b3VuZy13b21h/bi11c2luZy1jb21w/dXRlci1sYXB0b3At/bGVhcm4tZS1sZWFy/bmluZy1jb3Vyc2Ut/ZnJvbS1pbnRlcm5l/dC1ob21lXzM0MDQ4/LTEyMDYuanBn"
+        finally:
+            course=Course(id=str(uuid4()),name=courseName.capitalize(),image=courseImg,userId=currentUser.id)
+            course.save()
+        
+        for unit in units:
+            newUnit=Unit(id=str(uuid4()),name=unit["title"],courseId=course.id,course=course)
+            newUnit.save()
+
+            for chapter in unit["chapters"]:
+                newChapter=Chapter(id=uuid4(),unitId=newUnit.id,name=chapter["title"],youtubeSearchQuery=chapter["youtube_query"],unit=newUnit)
+                newChapter.save()
+                
+            with concurrent.futures.ThreadPoolExecutor() as exc:
+                print(Chapter.objects.filter(unit=newUnit))
+                res=[exc.submit(searchYoutube,chapter) for chapter in Chapter.objects.filter(unitId=newUnit.id)]
+                for f in concurrent.futures.as_completed(res):
+                    print(f.result())
+        return JsonResponse({"courseID":course.id})
+                
+
+    return HttpResponse("{'mes':'Not found'}",status=400)
+
+
     
 
 @csrf_exempt

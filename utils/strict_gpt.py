@@ -87,7 +87,7 @@ import re
 import json
 import concurrent.futures
 
-openai.api_key="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"
+openai.api_key="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"
 
 
 def strict_output(system_prompt, user_prompt, output_format, model="gpt-3.5-turbo", temperature=0):

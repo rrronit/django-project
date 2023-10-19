@@ -9,6 +9,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 def generateQuestion(para):
+
     chrome_options = Options()
     chrome_options.add_argument("--headless")
 
@@ -69,6 +70,7 @@ def generateQuestion(para):
     driver.quit()    
     print(data)
     try:
+        
         return json.loads(data)  
     except:
         return None

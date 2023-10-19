@@ -152,6 +152,7 @@ body{
 </style>
 <body>
   <nav class="navbar">
+     <a href="/">
     <div class="logo">
         <img src="https://logopond.com/logos/83d086afa834e039fa205045359b86d7.png" alt="Logo">
     </div>
@@ -236,224 +237,16 @@ body{
           ],
         };
 
-        const res = await fetch("processAddCourse/", {
+        const res = await fetch("/addCourse/", {
           method: "post",
           headers: {
             "X-CSRFToken": e.srcElement[0].value,
           },
           body: JSON.stringify(data),
-        });
-        location.href =e.srcElement[1].value;
+        }).then(res=>{
+          location.href =e.srcElement[1].value;
+        })
       });
-
-      /*       const Courses = [
-  "Introduction to Biology",
-  "Chemistry Fundamentals",
-  "Physics for Beginners",
-  "Web Development",
-  "Introduction to Data Science",
-  "Cybersecurity Essentials",
-  "Entrepreneurship and Startups",
-  "Digital Marketing Mastery",
-  "Financial Planning and Investment",
-  "Artificial Intelligence Fundamentals",
-  "Machine Learning for Beginners",
-  "JavaScript Programming",
-  "Graphic Design Basics",
-  "Photography Fundamentals",
-  "Introduction to Psychology",
-  "History of Civilization",
-  "Business Ethics and Leadership",
-  "Modern World Literature",
-  "Spanish Language Basics",
-  "French Cooking Techniques",
-  "Yoga and Meditation",
-  "Introduction to Astronomy",
-  "Environmental Science",
-  "Sociology: Understanding Society",
-  "Music Theory and Composition",
-  "Introduction to Film Studies",
-  "Introduction to Philosophy",
-  "Political Science and Government",
-  "Geology: Earth's History",
-  "Introduction to Economics",
-  "Statistics and Data Analysis",
-  "Public Speaking and Communication",
-  "Introduction to Robotics",
-  "Art History: Renaissance to Modern Art",
-  "Creative Writing Workshop",
-  "Marketing Strategies for Small Businesses",
-  "Digital Illustration and Design",
-  "Photography Editing and Post-Processing",
-  "Introduction to Nutrition and Health",
-  "World Geography and Cultures",
-  "Introduction to Cryptocurrency",
-  "Ethical Hacking and Penetration Testing",
-  "Introduction to 3D Printing",
-  "Human Anatomy and Physiology",
-  "Introduction to Sustainable Agriculture",
-  "Introduction to Python Programming",
-  "Front-End Web Development with React",
-  "Data Visualization with D3.js",
-  "Mobile App Development with React Native",
-  "Machine Learning with TensorFlow",
-  "Introduction to Artificial Neural Networks",
-  "Introduction to Game Development",
-  "Digital Marketing Analytics",
-  "Java Programming",
-  "Digital Photography Techniques",
-  "Introduction to Business Management",
-  "Financial Analysis and Investment Strategies",
-  "Spanish Language Intermediate",
-  "French Cuisine and Cooking Methods",
-  "Yoga and Mindfulness",
-  "Cosmology and Astrophysics",
-  "Conservation Biology",
-  "Cultural Anthropology",
-  "Classical Music Appreciation",
-  "Modern Art Movements",
-  "International Relations and Diplomacy",
-  "Climate Change and Environmental Policy",
-  "Statistics and Regression Analysis",
-  "Leadership and Team Management",
-  "Mobile App Design and User Experience",
-  "Natural Language Processing with Python",
-  "Machine Learning Algorithms",
-  "Virtual Reality Development",
-  "Social Media Marketing Strategies",
-  "Data Analysis with Python",
-  "Business Law and Ethics",
-  "Financial Accounting Principles",
-  "Spanish Language Proficiency",
-  "French Wine and Pairing",
-  "Meditation Techniques",
-  "Quantum Mechanics and Quantum Computing",
-  "Marine Biology and Conservation",
-  "Archaeology: Uncovering the Past",
-  "Great Philosophical Thinkers",
-  "Global Politics and Conflict Resolution",
-  "Microeconomics",
-  "Calculus",
-  "Cross-Cultural Communication",
-  "Digital Art and Illustration",
-  "Photoshop Techniques",
-  "Health and Nutrition Science",
-  "World Religions and Ethics",
-  "Blockchain Technology and Applications",
-  "Digital Marketing Campaign Management",
-  "Java Programming",
-  "Photography Composition",
-  "Human Resources Management",
-  "Financial Risk Analysis",
-  "Spanish Literature and Poetry",
-  "French Art and Impressionism",
-  "Tai Chi and Qi Gong",
-  "Astronomy and Space Exploration",
-  "Tropical Ecology and Biodiversity",
-  "Psychological Disorders and Treatment",
-  "Postmodern Literature and Theory",
-  "Diplomatic History and Negotiation",
-  "Game Design and Development",
-  "Artificial Intelligence",
-  "Blockchain and Cryptocurrency Fundamentals",
-  "JavaScript Frameworks",
-  "Data Science for Business",
-  "Machine Learning for Natural Language Processing",
-  "Web Application Security",
-  "Digital Marketing Strategy and Planning",
-  "Financial Analysis and Modeling",
-  "Data Visualization Techniques",
-  "Business Strategy",
-  "Mobile App Development",
-  "Cybersecurity Practices",
-  "Cloud Computing",
-  "Quantum Computing",
-  "Bioinformatics",
-  "Nanotechnology",
-  "Materials Science",
-  "Robotics and Automation",
-  "Space Exploration",
-  "Renewable Energy Systems",
-  "Environmental Policy and Conservation",
-  "Geopolitics and Global Security",
-  "International Business Management",
-  "Supply Chain Management",
-  "Human Resource Management",
-  "Marketing Analytics",
-  "Social Media Marketing",
-  "Branding and Advertising",
-  "Public Speaking and Persuasion",
-  "Creative Writing Workshop",
-  "Film Production and Direction",
-  "Music Composition and Production",
-  "Art History and Criticism",
-  "Philosophy and Ethics",
-  "Political Science and Governance",
-  "Economics and Economic Policy",
-  "Statistical Analysis Methods",
-  "Machine Learning and Deep Learning",
-  "Data Engineering and Big Data",
-  "Augmented and Virtual Reality",
-  "User Experience (UX) Design",
-  "Game Development and Design",
-  "Mobile Game Development",
-  "3D Printing and Additive Manufacturing",
-  "Biotechnology and Genetic Engineering",
-  "Medical Research and Health Sciences",
-  "Psychology and Behavioral Science",
-  "Sociology and Social Issues",
-  "Cultural Studies and Anthropology",
-  "History and Historical Analysis",
-  "Linguistics and Language Studies",
-  "Education and Pedagogy",
-  "Legal Studies and Jurisprudence",
-  "Conflict Resolution and Mediation",
-  "Project Management",
-  "Leadership and Organizational Behavior",
-  "Personal Development and Well-Being",
-  "Nutrition and Dietetics",
-  "Sports Science and Performance",
-  "Coaching and Training Techniques"]
-
-
-suggestion= document.querySelector(".suggestion")
-courseName=document.querySelector("#courseName")
-courseName.addEventListener("input",function k(){
-
-if (courseName.value!==""){
-    const filteredCourses=Courses.filter(e=>e.toLowerCase().includes(courseName.value.toLowerCase())).slice(0,5)
-    if (filteredCourses.length!==0){
-
-    
-    suggestion.innerHTML="<ul>"
-
-    for (let i=0;i<filteredCourses.length;i++) {
-        suggestion.innerHTML+=`<li>${filteredCourses[i]}</li>`
-    
-        }
-    suggestion.innerHTML+="</ul>"
-    }else{
-    suggestion.innerHTML=""
-        
-    }
-
-
-
-    document.querySelectorAll(".suggestion li").forEach(e=>addEventListener("click",(e)=>{
-        courseName.value=e.target.innerText
-        courseName.focus()
-   
-    }))
-
-
-}
-else{
-    suggestion.innerHTML=""
-
-}
-})
-
-     */
     });
   </script>
 </body>
